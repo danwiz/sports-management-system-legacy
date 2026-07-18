@@ -1,0 +1,63 @@
+name: Bootstrap verified source archive v3
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  import-source:
+    if: github.event.issue.title == 'Run verified source import v3'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            'https://drive.usercontent.google.com/download?id=1b-dLE5tD5m9mE7xLrRBsFQEe3aJLXZxW&export=download&confirm=t' \
+            --output /tmp/sports-management-system-legacy-v11.zip
+          test -s /tmp/sports-management-system-legacy-v11.zip
+          unzip -t /tmp/sports-management-system-legacy-v11.zip >/dev/null
+
+      - name: Extract and validate source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/sms-import
+          mkdir -p /tmp/sms-import
+          unzip -q /tmp/sports-management-system-legacy-v11.zip -d /tmp/sms-import
+          root='/tmp/sms-import/sports-management-system-legacy'
+          test -f "$root/README.md"
+          test -f "$root/modern/CMakeLists.txt"
+          test -f "$root/CHANGELOG.md"
+          test -f "$root/RELEASE_NOTES.md"
+          test -f "$root/PROVENANCE_AND_ATTRIBUTION.md"
+          test -d "$root/.github/workflows"
+
+      - name: Replace bootstrap repository with verified source
+        shell: bash
+        run: |
+          set -euo pipefail
+          root='/tmp/sms-import/sports-management-system-legacy'
+          rsync -a --delete --exclude='.git/' "$root/" ./
+
+      - name: Commit imported source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Dane Wisdom'
+          git config user.email 'danewisdom@gmail.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No source changes detected.'
+            exit 0
+          fi
+          git commit -m 'Publish verified Sports Management System modernization source'
+          git push origin main
