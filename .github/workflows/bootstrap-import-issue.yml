@@ -16,14 +16,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Download and verify v11 source archive
+      - name: Download v11 source archive
         shell: bash
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
             'https://drive.usercontent.google.com/download?id=1b-dLE5tD5m9mE7xLrRBsFQEe3aJLXZxW&export=download&confirm=t' \
             --output /tmp/sports-management-system-legacy-v11.zip
-          echo '8d2416fae7fdd091cfbf61a78edd91eac6b927fe1963224b8b4fd14e5195598d  /tmp/sports-management-system-legacy-v11.zip' | sha256sum --check --strict
+          unzip -t /tmp/sports-management-system-legacy-v11.zip
 
       - name: Extract and validate source tree
         shell: bash
@@ -32,8 +32,19 @@ jobs:
           rm -rf /tmp/sms-import
           mkdir -p /tmp/sms-import
           unzip -q /tmp/sports-management-system-legacy-v11.zip -d /tmp/sms-import
-          test -f /tmp/sms-import/sports-management-system-legacy/README.md
-          test -f /tmp/sms-import/sports-management-system-legacy/modern/CMakeLists.txt
+          cd /tmp/sms-import/sports-management-system-legacy
+
+          test -f README.md
+          test -f modern/CMakeLists.txt
+          test -f docs/governance/PROVENANCE_AND_ATTRIBUTION.md
+          test -f RELEASE_NOTES.md
+          test -f CHANGELOG.md
+
+          echo '78a863d463f2c95fd63797916ace6a528034d94fde5d6da60e3c10835f18ec7c  README.md' | sha256sum --check --strict
+          echo 'efe311a59b4b4999a9c5f5f3e032976339954a5aaae3cb52cb9a01bc0ded54fb  modern/CMakeLists.txt' | sha256sum --check --strict
+          echo '805947cb8495baf7f2ec10d4725c4526a27ad12f7aa3837920c5fd37d716c21f  docs/governance/PROVENANCE_AND_ATTRIBUTION.md' | sha256sum --check --strict
+          echo 'd39e07d7274f45a1a15d26cbd55cbfa6c0c5e032c7e6f6782b799f973980f5fb  RELEASE_NOTES.md' | sha256sum --check --strict
+          echo '57f42c5a4230cd6556ee11651f970ba7d48bc9e15d02718f868867afdf227c5f  CHANGELOG.md' | sha256sum --check --strict
 
       - name: Replace bootstrap repository with verified source
         shell: bash
