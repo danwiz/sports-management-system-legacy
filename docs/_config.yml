@@ -1,0 +1,6 @@
+title: Sports Management System Modernization
+description: Legacy C++ preservation and C++20 modernization case study by Dane Wisdom.
+theme: jekyll-theme-cayman
+show_downloads: true
+github:
+  repository_url: https://github.com/danwiz/sports-management-system-legacy
