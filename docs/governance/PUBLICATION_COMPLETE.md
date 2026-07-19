@@ -25,4 +25,4 @@ The released project is featured in the `danwiz/danwiz` GitHub profile README as
 
 ## Completion status
 
-The controlled publication baseline is complete. Future work should proceed as normal maintenance and portfolio enhancement rather than bootstrap publication.
+The controlled publication baseline is complete. Publication tracker Issue #5 can be closed. Future work should proceed as normal maintenance and portfolio enhancement rather than bootstrap publication.
