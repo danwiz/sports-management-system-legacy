@@ -1,0 +1,73 @@
+
+GENERAL:
+
+
+    . Change the data type for the fields to accept both numbers and text
+      because if a mistake is made entering the wrong thing the screen
+      either freezes or skips out some of the required entries
+    . Make sure to be consistent with the wording. For example if you're
+      using information on one screen don't use data on another. The same
+      goes for the words players and members.
+    . Make sure the screen says exactly what it does on the top and bottom.
+      For example when deleting a player the top of the screen should not
+      say adding a player.
+    . You need to put an option for getting out and back to the main menu or
+      previous menu on each screen. For example when you enter info and it
+      says database updated successfully I have to go close and re-execute
+      the program to do another task.
+    . Make sure prompt is relevant for particular screen for example when
+      viewing a netball match prompt should not say do you want to view all
+      soccer match
+    . The program does not accept keyboard for menu for menu option where it
+      says enter choice.
+    . User should be able to print records.
+    . Where you have enter officials i.e. T. Withmore it should be e.g. T
+      Whitmore. The same goes for entering the time.
+    . Need to be able to edit a match information or player information
+      without retyping even the information that does not need correction.
+    . Please change the name of the file that the names of all the MVP is
+      written to, to "mvp.txt"
+
+
+
+
+Match Management
+
+    . When the number of corners is entered it is overtyping the sports
+      system text that is highlighted in gray to the lower right of the
+      screen.
+    . Only some of the prompts appear on the top of the screen others appear
+      in the task bar and I have to manually bring it up.
+    . When editing an existing match it takes me to a screen that says
+      adding new soccer match. Then when I enter the id it says the id
+      already exists it does not allow me to edit which it should.
+
+
+
+
+   Member management
+
+
+      . In member management menu when you select the main menu option it
+        redisplays the same menu not the main menu.
+      . If a mistake is made in entering information and the enter button
+        is already pressed need to be able to go back and correct it.
+      . For delete member when you choose that option it just takes you to
+        the screen delete member and it does not allow you to enter data.
+      . When you choose to display members if you press the up or down
+        arrows it just takes you forward it should be able to take you back
+        or forward through the list. Also when you reach the last entry it
+        just takes you out and back to the main menu without warning.
+      . When you click on delete member the screen just comes up without
+        allowing user to enter the member to delete. Then a message prompt
+        comes up saying id # could not be found. When I click on ok another
+        one comes up saying are you sure you want to delete this team. It
+        should read are you sure you want to delete this player and it
+        should also allow me to enter the player ID.
+      . When trying to edit an existing member after entering player's id
+        number and the info is displayed where the members D.O.B should be
+        it had a line of text that says here is the players information.
+        This line of text appears in the middle of the information on other
+        screens.
+      . There should also be an entry for the team code for the member.
+

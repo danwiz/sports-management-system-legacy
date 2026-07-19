@@ -1,0 +1,89 @@
+
+Universiy of  Technology
+               School of Computing and Information Technology
+
+                          SHOULD BE DONE USING C++
+
+
+System Specification
+
+The University of Technology has suddenly recognized that a number of world-
+ class sport persons are always among its current or pass student
+population. Examples are Asafa Powel (Track and Field), Maceleno Moving
+(Soccer), Sherone Simpson (Track and Field ), Nicala Gibson (Netball) and
+the list could go on.
+You are required  develop a simple sports Sports Management System (SMS)
+that will help to manage sports activities at the University of Technology.
+
+The University has a number of different sporting teams in each faculty.
+All teams have a team code, Title, team size, squad size, coach, captain,
+number of wins and number of losses. The University is planning to start
+initially with 3 different sporting activities namely soccer, track & field
+and netball. For these three sports we need to consider additional
+information relevant to the respect sport.
+
+For a soccer team we need to consider the team memebers, number of red
+cards, number of yellow cards, and number of reserved players, total goals
+scored, total goals against. For netball team we need to keep track of the
+team members, total number of points scored, total number of points
+against. For track & field we need to consider team members, number of
+total number of goal medals, number of silver medals, seasons best time,
+number of appearances, number of bronze medals and total number of medals.
+
+
+A match is basically an active competition between two teams. For each
+match we must a match code eg. SO4, officials, location, time played , team
+1, team 2, date played, results, MVP name, winner and loser. For a football
+match we need to keep track of number of penalties, number of corners
+number of throws. For a netball match we need need to consider number of
+penalties and number of free passes. For a track meet we need to cinsider
+number of false starts.
+
+For all team members of any sport we need to keep track of their name,
+address, date of birth, id number and faculty.
+
+You can factor out any redundancies in the above specification with valid
+reasons. You can also add extra functionalities, try to be creative and
+intuitive.
+
+
+
+
+
+The users require the following functionalities of the system:
+
+   1. Add/delete /edit view a team's information.
+   2. Add/delete/edit view a match's information
+   3. Display team stastics eg. Played 3-Win 2- lose1-draw0
+   4. Extentions of your choice. In the documentation be sure to explain
+      clearly your extentions. A possible extention is the ability to
+      determine which player  plays  more than one sport. Another is the
+      ability to print information about all the matches in the system.
+
+
+Use files to maintain the persistency of all data entered. The names of all
+the MVP should be written to a separate file called "mvp.txt"
+
+
+How the program should be handed in
+
+Hand in the following :
+    . Hardcopy of the documents i.e. noun verb analysis, class diagrams and
+      relationship diagrams
+    . Softcopy of all files for the project (.ide, .h, .cpp, .exe, etc).
+      Also remember to include all files that store the information for the
+      system (.txt, .dat, )
+
+Marking Scheme
+
+    . Functionality of SMS
+
+    . Use of graphics to make SMS look and feel better
+
+    . Object orientated analysis(noun- verb analysis, class diagrams,
+      relationship diagrams)
+
+    . The program should consist of comments to explain the code.
+
+
+

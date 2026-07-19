@@ -1,0 +1,27 @@
+name: Modernization task
+description: Propose a migration or architecture task
+title: "modernize: "
+labels: [modernization]
+body:
+  - type: textarea
+    id: legacy
+    attributes:
+      label: Legacy capability
+    validations:
+      required: true
+  - type: textarea
+    id: target
+    attributes:
+      label: Target architecture or behavior
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and risks

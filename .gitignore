@@ -1,0 +1,15 @@
+*.exe
+*.obj
+*.o
+*.dat
+*.tmp
+.DS_Store
+
+build/
+
+# CMake and generated release artifacts
+/build/
+/modern/build*/
+/modern/stage/
+/modern/demo-data/
+*.tar.gz
