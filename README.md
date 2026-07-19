@@ -29,7 +29,9 @@ The project intentionally separates two tracks:
 
 ## Modern capabilities
 
-- Team, member, and match management
+- Team, member, match, and performance lifecycle management
+- Service-routed validation and referential-integrity protection
+- Full team and match editing with blank-to-retain behavior
 - CSV-backed persistent storage
 - Soccer, netball, and track-and-field statistics
 - Deterministic MVP calculation and `mvp.txt` generation
@@ -67,8 +69,8 @@ cd modern/build-demo && cpack -G ZIP && cpack -G TGZ
 - `modern/` — portable implementation, tests, and sample data
 - `docs/original/` — original assignment and acceptance-feedback artifacts
 - `docs/analysis/` — extracted requirements, checksums, and technical assessment
-- `docs/architecture/` — architecture decisions
-- `docs/modernization/` — behavior mappings and modernization records
+- `docs/architecture/` — architecture decisions and Mermaid diagrams
+- `docs/modernization/` — behavior mappings, traceability, and modernization records
 - `docs/operations/` — installation, packaging, and release-readiness guidance
 - `docs/governance/` — provenance, publication, and licensing controls
 - `scripts/` — validation and demonstration automation
@@ -77,10 +79,20 @@ cd modern/build-demo && cpack -G ZIP && cpack -G TGZ
 
 The legacy files remain unchanged and are not treated as current production software. The modernization uses standard C++20, repository abstractions, service-layer validation, CSV persistence, explicit domain types, portable CLI workflows, and regression tests mapped to recovered requirements and UAT evidence.
 
+Architecture views:
+
+- [Architecture diagram index](docs/architecture/README.md)
+- [Domain model](docs/architecture/DOMAIN_MODEL.md)
+- [Component architecture](docs/architecture/COMPONENT_ARCHITECTURE.md)
+- [Validated mutation sequence](docs/architecture/MUTATION_SEQUENCE.md)
+- [Backup and restore flow](docs/architecture/BACKUP_RESTORE_FLOW.md)
+- [Legacy preservation boundary](docs/architecture/PRESERVATION_BOUNDARY.md)
+
 ## Documentation
 
 - [Technical assessment](docs/analysis/TECHNICAL_ASSESSMENT.md)
 - [Architecture decision record](docs/architecture/ADR-0001-preserve-and-modernize.md)
+- [Requirements traceability matrix](docs/modernization/REQUIREMENTS_TRACEABILITY_MATRIX.md)
 - [CLI and UAT mapping](docs/modernization/CLI_UAT_MAPPING.md)
 - [Statistics and MVP design](docs/modernization/STATISTICS_AND_MVP.md)
 - [Reporting and data quality](docs/modernization/REPORTING_AND_DATA_QUALITY.md)
@@ -91,7 +103,7 @@ The legacy files remain unchanged and are not treated as current production soft
 
 ## Roadmap
 
-The next maintenance release is `v0.11.0`, focused on complete service-routed edit/delete operations, improved sport-specific CLI prompts, formal requirements traceability, and UML documentation. Track the roadmap in the repository issues.
+The `v0.11.0` work now includes service-routed lifecycle operations, complete team and match editing, sport-specific prompts, formal requirements traceability, and Mermaid architecture documentation. Remaining work is tracked in the repository issues.
 
 ## Licensing
 
