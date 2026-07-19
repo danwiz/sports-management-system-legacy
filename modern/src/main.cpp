@@ -1,6 +1,6 @@
 #include <filesystem>
 #include <iostream>
-#include <limits>
+#include <optional>
 #include <string>
 
 #include "sms/csv_match_repository.hpp"
@@ -29,6 +29,48 @@ int prompt_int(const std::string& label) {
         } catch (...) {
         }
         std::cout << "Please enter a valid whole number.\n";
+    }
+}
+
+std::optional<int> prompt_optional_int(const std::string& label, int current) {
+    while (true) {
+        const auto value = prompt(label + " [" + std::to_string(current) + "]: ");
+        if (value.empty()) return std::nullopt;
+        try {
+            std::size_t consumed = 0;
+            const int result = std::stoi(value, &consumed);
+            if (consumed == value.size()) return result;
+        } catch (...) {
+        }
+        std::cout << "Please enter a valid whole number or leave blank to retain the current value.\n";
+    }
+}
+
+struct StatisticLabels {
+    std::string primary;
+    std::string secondary;
+    std::string tertiary;
+};
+
+StatisticLabels statistic_labels(const std::string& sport) {
+    if (sport == "soccer") return {"Goals", "Assists", "Saves"};
+    if (sport == "netball") return {"Goals", "Assists", "Interceptions"};
+    if (sport == "track" || sport == "track and field") {
+        return {"First-place finishes", "Second-place finishes", "Third-place finishes"};
+    }
+    return {"Primary statistic", "Secondary statistic", "Tertiary statistic"};
+}
+
+void prompt_statistics(sms::Performance& item, bool retain_existing) {
+    const auto labels = statistic_labels(item.sport);
+    if (retain_existing) {
+        if (const auto value = prompt_optional_int(labels.primary, item.primary)) item.primary = *value;
+        if (const auto value = prompt_optional_int(labels.secondary, item.secondary)) item.secondary = *value;
+        if (const auto value = prompt_optional_int(labels.tertiary, item.tertiary)) item.tertiary = *value;
+    } else {
+        item.primary = prompt_int(labels.primary + ": ");
+        item.secondary = prompt_int(labels.secondary + ": ");
+        item.tertiary = prompt_int(labels.tertiary + ": ");
     }
 }
 
@@ -62,7 +104,7 @@ void list_matches(const sms::MatchRepository& matches) {
 
 void teams_menu(sms::SportsService& service, sms::TeamRepository& teams) {
     while (true) {
-        std::cout << "\nTeams\n1. List teams\n2. Add team\n3. Delete team\n0. Back\n";
+        std::cout << "\nTeams\n1. List teams\n2. Add team\n3. Edit team\n4. Delete team\n0. Back\n";
         const auto choice = prompt("Selection: ");
         if (choice == "0") return;
         if (choice == "1") { list_teams(teams); continue; }
@@ -73,6 +115,18 @@ void teams_menu(sms::SportsService& service, sms::TeamRepository& teams) {
             continue;
         }
         if (choice == "3") {
+            const auto code = prompt("Team code to edit: ");
+            auto team = teams.find(code);
+            if (!team) { std::cout << "Team not found.\n"; continue; }
+            const auto name = prompt("Team name [" + team->name + "]: ");
+            const auto sport = prompt("Sport [" + team->sport + "]: ");
+            if (!name.empty()) team->name = name;
+            if (!sport.empty()) team->sport = sport;
+            std::string error;
+            std::cout << (service.update_team(*team, error) ? "Team updated.\n" : "Unable to update team: " + error + "\n");
+            continue;
+        }
+        if (choice == "4") {
             std::string error;
             const auto code = prompt("Team code to delete: ");
             std::cout << (service.remove_team(code, error) ? "Team deleted.\n" : "Unable to delete team: " + error + "\n");
@@ -107,7 +161,8 @@ void members_menu(sms::SportsService& service, sms::MemberRepository& members) {
             if (!last.empty()) member->last_name = last;
             if (!dob.empty()) member->date_of_birth = dob;
             if (!team.empty()) member->team_code = team;
-            std::string error; std::cout << (service.update_member(*member, error) ? "Member updated.\n" : "Unable to update member: " + error + "\n");
+            std::string error;
+            std::cout << (service.update_member(*member, error) ? "Member updated.\n" : "Unable to update member: " + error + "\n");
             continue;
         }
         if (choice == "4") {
@@ -122,7 +177,7 @@ void members_menu(sms::SportsService& service, sms::MemberRepository& members) {
 
 void matches_menu(sms::SportsService& service, sms::MatchRepository& matches) {
     while (true) {
-        std::cout << "\nMatches\n1. List matches\n2. Add match\n3. Edit score\n4. Delete match\n0. Back\n";
+        std::cout << "\nMatches\n1. List matches\n2. Add match\n3. Edit match\n4. Delete match\n0. Back\n";
         const auto choice = prompt("Selection: ");
         if (choice == "0") return;
         if (choice == "1") { list_matches(matches); continue; }
@@ -138,9 +193,20 @@ void matches_menu(sms::SportsService& service, sms::MatchRepository& matches) {
             const auto id = prompt("Match ID to edit: ");
             auto match = matches.find(id);
             if (!match) { std::cout << "Match not found.\n"; continue; }
-            match->home_score = prompt_int("Home score: ");
-            match->away_score = prompt_int("Away score: ");
-            std::string error; std::cout << (service.update_match(*match, error) ? "Score updated.\n" : "Unable to update score: " + error + "\n");
+            const auto sport = prompt("Sport [" + match->sport + "]: ");
+            const auto home = prompt("Home team code [" + match->home_team_code + "]: ");
+            const auto away = prompt("Away team code [" + match->away_team_code + "]: ");
+            const auto scheduled = prompt("Scheduled date/time [" + match->scheduled_at + "]: ");
+            const auto venue = prompt("Venue [" + match->venue + "]: ");
+            if (!sport.empty()) match->sport = sport;
+            if (!home.empty()) match->home_team_code = home;
+            if (!away.empty()) match->away_team_code = away;
+            if (!scheduled.empty()) match->scheduled_at = scheduled;
+            if (!venue.empty()) match->venue = venue;
+            if (const auto score = prompt_optional_int("Home score", match->home_score)) match->home_score = *score;
+            if (const auto score = prompt_optional_int("Away score", match->away_score)) match->away_score = *score;
+            std::string error;
+            std::cout << (service.update_match(*match, error) ? "Match updated.\n" : "Unable to update match: " + error + "\n");
             continue;
         }
         if (choice == "4") {
@@ -161,12 +227,25 @@ void statistics_menu(sms::SportsService& service, sms::PerformanceRepository& pe
         if (choice == "1") {
             const auto items = performances.list();
             if (items.empty()) std::cout << "No statistics recorded.\n";
-            for (const auto& item : items) std::cout << item.id << " | " << item.sport << " | member " << item.member_id << " | match " << item.match_id << " | " << item.primary << ", " << item.secondary << ", " << item.tertiary << " | score " << service.performance_score(item) << '\n';
+            for (const auto& item : items) {
+                const auto labels = statistic_labels(item.sport);
+                std::cout << item.id << " | " << item.sport << " | member " << item.member_id
+                          << " | match " << item.match_id << " | " << labels.primary << '=' << item.primary
+                          << ", " << labels.secondary << '=' << item.secondary << ", " << labels.tertiary
+                          << '=' << item.tertiary << " | score " << service.performance_score(item) << '\n';
+            }
             continue;
         }
         if (choice == "2") {
-            sms::Performance item{prompt("Performance ID: "), prompt("Match ID: "), prompt("Member ID: "), prompt("Sport (soccer/netball/track): "), prompt_int("Primary statistic: "), prompt_int("Secondary statistic: "), prompt_int("Tertiary statistic: ")};
-            std::string error; std::cout << (service.add_performance(std::move(item), error) ? "Performance added.\n" : "Unable to add performance: " + error + "\n"); continue;
+            sms::Performance item;
+            item.id = prompt("Performance ID: ");
+            item.match_id = prompt("Match ID: ");
+            item.member_id = prompt("Member ID: ");
+            item.sport = prompt("Sport (soccer/netball/track): ");
+            prompt_statistics(item, false);
+            std::string error;
+            std::cout << (service.add_performance(std::move(item), error) ? "Performance added.\n" : "Unable to add performance: " + error + "\n");
+            continue;
         }
         if (choice == "3") {
             const auto id = prompt("Performance ID to edit: ");
@@ -178,9 +257,7 @@ void statistics_menu(sms::SportsService& service, sms::PerformanceRepository& pe
             if (!match_id.empty()) item->match_id = match_id;
             if (!member_id.empty()) item->member_id = member_id;
             if (!sport.empty()) item->sport = sport;
-            item->primary = prompt_int("Primary statistic: ");
-            item->secondary = prompt_int("Secondary statistic: ");
-            item->tertiary = prompt_int("Tertiary statistic: ");
+            prompt_statistics(*item, true);
             std::string error;
             std::cout << (service.update_performance(*item, error) ? "Performance updated.\n" : "Unable to update performance: " + error + "\n");
             continue;
@@ -192,9 +269,19 @@ void statistics_menu(sms::SportsService& service, sms::PerformanceRepository& pe
             continue;
         }
         if (choice == "5") {
-            for (const auto& sport : {std::string("soccer"), std::string("netball"), std::string("track")}) { auto mvp=service.mvp_for_sport(sport); std::cout << sport << ": "; if(mvp) std::cout << mvp->member.first_name << ' ' << mvp->member.last_name << " (score " << mvp->score << ")\n"; else std::cout << "No qualifying statistics.\n"; } continue;
+            for (const auto& sport : {std::string("soccer"), std::string("netball"), std::string("track")}) {
+                const auto mvp = service.mvp_for_sport(sport);
+                std::cout << sport << ": ";
+                if (mvp) std::cout << mvp->member.first_name << ' ' << mvp->member.last_name << " (score " << mvp->score << ")\n";
+                else std::cout << "No qualifying statistics.\n";
+            }
+            continue;
         }
-        if (choice == "6") { std::string error; std::cout << (service.write_mvp_file("mvp.txt", error) ? "mvp.txt written.\n" : "Unable to write file: " + error + "\n"); continue; }
+        if (choice == "6") {
+            std::string error;
+            std::cout << (service.write_mvp_file("mvp.txt", error) ? "mvp.txt written.\n" : "Unable to write file: " + error + "\n");
+            continue;
+        }
         std::cout << "Unknown selection.\n";
     }
 }
@@ -206,10 +293,16 @@ void data_menu(sms::DataManagementService& data) {
         if (choice == "0") return;
         const auto path = prompt("Backup directory: ");
         std::string error;
-        if (choice == "1") std::cout << (data.create_backup(path,error) ? "Backup created.\n" : "Backup failed: "+error+"\n");
-        else if (choice == "2") std::cout << (data.restore_backup(path,error) ? "Backup restored. Restart the application to reload data.\n" : "Restore failed: "+error+"\n");
-        else if (choice == "3") { auto entries=data.inspect_backup(path,error); if(!error.empty()) std::cout<<"Verification failed: "<<error<<'\n'; else {std::cout<<"Backup verified: "<<entries.size()<<" files.\n"; for(auto&e:entries)std::cout<<e.file_name<<" | "<<e.size<<" bytes | "<<e.checksum<<'\n';}}
-        else std::cout << "Unknown selection.\n";
+        if (choice == "1") std::cout << (data.create_backup(path, error) ? "Backup created.\n" : "Backup failed: " + error + "\n");
+        else if (choice == "2") std::cout << (data.restore_backup(path, error) ? "Backup restored. Restart the application to reload data.\n" : "Restore failed: " + error + "\n");
+        else if (choice == "3") {
+            const auto entries = data.inspect_backup(path, error);
+            if (!error.empty()) std::cout << "Verification failed: " << error << '\n';
+            else {
+                std::cout << "Backup verified: " << entries.size() << " files.\n";
+                for (const auto& entry : entries) std::cout << entry.file_name << " | " << entry.size << " bytes | " << entry.checksum << '\n';
+            }
+        } else std::cout << "Unknown selection.\n";
     }
 }
 
