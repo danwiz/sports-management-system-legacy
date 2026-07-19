@@ -4,9 +4,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  issues:
+    types: [opened]
 
 jobs:
   build-and-test:
+    if: github.event_name != 'issues' || github.event.issue.title == 'Run CMake release validation'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
