@@ -18,6 +18,8 @@ Rather than overwrite that history, the repository preserves the original artifa
 
 - Portable C++20 architecture with CMake
 - Repository abstractions and service-layer validation
+- Service-routed lifecycle operations and referential-integrity controls
+- Full team and match editing workflows
 - CSV-backed persistence
 - Team, member, match, and performance workflows
 - Sport-specific scoring and deterministic MVP selection
@@ -26,6 +28,7 @@ Rather than overwrite that history, the repository preserves the original artifa
 - Seven automated regression test suites
 - GitHub Actions validation
 - CPack ZIP and TGZ distribution generation
+- Requirements traceability and Mermaid architecture documentation
 - Provenance, licensing, security, and contribution controls
 
 ## Engineering decisions
@@ -33,6 +36,15 @@ Rather than overwrite that history, the repository preserves the original artifa
 The modernization separates domain logic, persistence, application services, and presentation concerns. Historical source files remain unchanged under `legacy-source/`, while all modern code lives under `modern/`.
 
 The project uses recovered assignment requirements and user-acceptance feedback as traceable evidence for behavior reconstruction.
+
+## Architecture views
+
+- [Architecture diagram index](architecture/README.md)
+- [Domain model](architecture/DOMAIN_MODEL.md)
+- [Component architecture](architecture/COMPONENT_ARCHITECTURE.md)
+- [Validated mutation sequence](architecture/MUTATION_SEQUENCE.md)
+- [Backup and restore flow](architecture/BACKUP_RESTORE_FLOW.md)
+- [Legacy preservation boundary](architecture/PRESERVATION_BOUNDARY.md)
 
 ## Validation
 
@@ -48,13 +60,14 @@ The `v0.10.0` release passed a clean GitHub Actions run:
 - [Latest release](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
 - [Technical assessment](analysis/TECHNICAL_ASSESSMENT.md)
 - [Architecture decision](architecture/ADR-0001-preserve-and-modernize.md)
+- [Requirements traceability matrix](modernization/REQUIREMENTS_TRACEABILITY_MATRIX.md)
 - [Modernization documentation](modernization/)
 - [Operations documentation](operations/)
 - [Provenance and attribution](governance/PROVENANCE_AND_ATTRIBUTION.md)
 
 ## Next phase
 
-The `v0.11.0` roadmap focuses on complete service-routed edit/delete operations, improved sport-specific CLI interactions, formal requirements traceability, and UML documentation.
+The active `v0.11.0` work has completed lifecycle routing, editing workflows, requirements traceability, and architecture documentation. Remaining maintenance and portfolio work is tracked in the repository issues.
 
 ---
 
