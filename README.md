@@ -1,56 +1,45 @@
-# Sports Management System (Legacy C++ Archive)
+# Sports Management System — Legacy C++ Preservation & Modernization
 
-A preservation and modernization workspace for a University of Technology sports-management coursework project, originally developed in 2005–2006 using Borland-era C++ console graphics.
+[![CMake](https://github.com/danwiz/sports-management-system-legacy/actions/workflows/cmake.yml/badge.svg)](https://github.com/danwiz/sports-management-system-legacy/actions/workflows/cmake.yml)
+[![Release](https://img.shields.io/github/v/release/danwiz/sports-management-system-legacy)](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
+[![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)
+[![License: MIT](https://img.shields.io/badge/modern%20code-MIT-green.svg)](LICENSE.md)
 
-## Scope
+A preservation and modernization case study for a University of Technology sports-management coursework project originally developed in 2005–2006 using Borland-era C++ console graphics.
 
-The system manages soccer, netball, and track-and-field teams, matches, players/members, statistics, persistent files, and MVP records. Four related monolithic source revisions are preserved without asserting which one is the final production version.
+**Latest release:** [v0.10.0 — Release Packaging and Demonstration Baseline](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
 
-## Current status
+## Why this project matters
 
-The repository contains two intentionally separate tracks:
+This repository demonstrates how a large, incomplete legacy academic system can be preserved as historical evidence while its behavior is reconstructed as a portable, tested, documented C++20 application.
 
-- the preserved legacy implementation, which is not build-ready because it depends on missing project headers and obsolete Borland/Windows APIs; and
-- a buildable, tested C++20 modernization under `modern/` with persistent storage, interactive workflows, reporting, backup/restore, and release packaging.
+The project intentionally separates two tracks:
 
-## Repository structure
+- `legacy-source/` preserves four original monolithic source revisions and their historical context;
+- `modern/` provides a buildable C++20 implementation with CMake, persistence, validation, reporting, backup and restore, packaging, and automated tests.
 
-- `legacy-source/` — preserved source revisions
-- `docs/original/` — original assignment and acceptance-feedback documents
-- `docs/analysis/` — extracted specifications, checksums, and technical assessment
-- `mail-discovery/` — evidence log for related-mail searches
-- `modern/` — portable C++20 implementation and tests
-- `scripts/` — validation and demonstration automation
-- `docs/governance/` — provenance and GitHub publication controls
+## Verified release state
 
-## Principal findings
+- Clean GitHub Actions configuration: passed
+- C++20 build: passed
+- Automated tests: 7 of 7 passed
+- Stable release: `v0.10.0`
+- Release packaging: ZIP and TGZ through CPack
+- Provenance and split-licensing controls: documented
 
-1. The assignment calls for object-oriented team, match, and member management with file persistence and a separate `mvp.txt` file.
-2. The four source revisions are highly similar (roughly 96.7%–99.9% pairwise similarity), indicating iterative fixes rather than independent projects.
-3. Each source is about 3,300 lines and references a missing multi-header domain model and persistence layer.
-4. User-acceptance feedback identifies navigation, edit/delete workflow, input validation, terminology, display-layout, keyboard, printing, and record-browsing defects.
-5. Modernization should preserve the originals and rebuild separately using standard C++20, CMake, tested domain classes, repository interfaces, and a portable CLI/TUI.
+## Modern capabilities
 
-## Recommended modernization phases
+- Team, member, and match management
+- CSV-backed persistent storage
+- Soccer, netball, and track-and-field statistics
+- Deterministic MVP calculation and `mvp.txt` generation
+- Case-insensitive member search
+- Team summaries and operational reporting
+- Referential-integrity and data-quality auditing
+- Checksum-verified backup, restore, and portable export
+- Sample data, demonstration scripts, installation rules, and release packaging
 
-1. Recover missing headers, data files, IDE/project files, and executable artifacts.
-2. Establish the canonical revision using timestamps, functional comparison, and acceptance-test evidence.
-3. Extract domain models (`Member`, `Team`, sport-specific teams, `Match`, sport-specific matches).
-4. Replace direct file manipulation with repository abstractions and validated serialization.
-5. Replace Borland graphics with a portable CLI/TUI presentation layer.
-6. Add unit, integration, persistence, and acceptance tests mapped to the original requirements and defect report.
-
-## Provenance
-
-Original project artifacts supplied by Dane Wisdom. Preserve attribution and academic context when redistributing.
-
-## Modernization baseline
-
-The portable C++20 layer now includes both in-memory and CSV-backed member repositories, allowing data to persist across runs without external dependencies. CSV writes use a temporary file and rename step to reduce partial-write risk.
-
-A portable C++20 baseline is available under `modern/`. It intentionally does not modify the archival implementation. It includes domain models, repository abstractions, CSV persistence, a validated application service, a portable CLI, statistics and MVP calculation, reporting, data-quality auditing, backup/restore, automated tests, packaging, and GitHub Actions CI.
-
-Build locally:
+## Build and test
 
 ```bash
 cmake -S modern -B build
@@ -58,61 +47,13 @@ cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-## Repository governance
-
-- `CONTRIBUTING.md` defines preservation boundaries and contribution practices.
-- `SECURITY.md` identifies supported code and legacy risks.
-- `.github/` contains CI, ownership, issue templates, and the pull-request template.
-- `docs/architecture/` records architecture decisions.
-- `scripts/validate.sh` performs a reproducible configure, build, and test run.
-
-## Current modernization capabilities
-
-- Member CRUD with in-memory and CSV-backed persistence.
-- Team CRUD through a repository abstraction.
-- Match CRUD through a repository abstraction.
-- Application service validation for team assignments, sport consistency, duplicate identifiers, and referentially safe team deletion.
-- Reproducible CMake build and three automated regression tests.
-
-## Interactive application
-
-The modern application now provides persistent team, member, and match management through a portable command-line interface.
+Run the application with an optional data-directory argument:
 
 ```bash
-cmake -S modern -B build
-cmake --build build
 ./build/sms_app ./data
 ```
 
-The optional final argument selects the data directory. The application creates and maintains:
-
-- `teams.csv`
-- `members.csv`
-- `matches.csv`
-
-Every submenu provides an explicit **Back** option. Record editing preserves existing values when blank input is submitted, and invalid numeric score input is rejected without leaving the input stream in a failed state.
-
-## Statistics and MVP
-
-The modern application records per-member performance statistics for a specific match. The three integer fields are interpreted by sport:
-
-- Soccer: goals, assists, saves; score = goals×5 + assists×3 + saves.
-- Netball: goals, assists, interceptions; score = goals×2 + assists×3 + interceptions×4.
-- Track and field: first-, second-, and third-place results; score = first×10 + second×7 + third×5.
-
-The Statistics and MVP menu can display leaders and create the assignment-compatible `mvp.txt` file.
-
-## Reporting and audit capabilities
-
-The modern service can search member records, calculate team summaries, export an operational text report, and audit stored data for broken references or inconsistent sports. These capabilities are covered by the `reporting_test` regression suite.
-
-## Data protection
-
-The Data Management menu creates checksum-verified backups and safely restores the four-file CSV dataset.
-
-## Release packaging
-
-The modern application now includes install rules, CPack archive generation, sample operational data, and a one-command demonstration workflow:
+Run the deterministic demonstration and package workflow:
 
 ```bash
 ./scripts/demo.sh
@@ -120,12 +61,42 @@ cmake --install modern/build-demo --prefix modern/stage
 cd modern/build-demo && cpack -G ZIP && cpack -G TGZ
 ```
 
-See `docs/operations/INSTALLATION_AND_PACKAGING.md` and `docs/operations/RELEASE_READINESS_CHECKLIST.md`.
+## Repository map
+
+- `legacy-source/` — preserved C++ revisions
+- `modern/` — portable implementation, tests, and sample data
+- `docs/original/` — original assignment and acceptance-feedback artifacts
+- `docs/analysis/` — extracted requirements, checksums, and technical assessment
+- `docs/architecture/` — architecture decisions
+- `docs/modernization/` — behavior mappings and modernization records
+- `docs/operations/` — installation, packaging, and release-readiness guidance
+- `docs/governance/` — provenance, publication, and licensing controls
+- `scripts/` — validation and demonstration automation
+
+## Architecture and preservation approach
+
+The legacy files remain unchanged and are not treated as current production software. The modernization uses standard C++20, repository abstractions, service-layer validation, CSV persistence, explicit domain types, portable CLI workflows, and regression tests mapped to recovered requirements and UAT evidence.
+
+## Documentation
+
+- [Technical assessment](docs/analysis/TECHNICAL_ASSESSMENT.md)
+- [Architecture decision record](docs/architecture/ADR-0001-preserve-and-modernize.md)
+- [CLI and UAT mapping](docs/modernization/CLI_UAT_MAPPING.md)
+- [Statistics and MVP design](docs/modernization/STATISTICS_AND_MVP.md)
+- [Reporting and data quality](docs/modernization/REPORTING_AND_DATA_QUALITY.md)
+- [Installation and packaging](docs/operations/INSTALLATION_AND_PACKAGING.md)
+- [Release readiness](docs/operations/RELEASE_READINESS_CHECKLIST.md)
+- [Provenance and attribution](docs/governance/PROVENANCE_AND_ATTRIBUTION.md)
+- [Publication completion record](docs/governance/PUBLICATION_COMPLETE.md)
+
+## Roadmap
+
+The next maintenance release is `v0.11.0`, focused on complete service-routed edit/delete operations, improved sport-specific CLI prompts, formal requirements traceability, and UML documentation. Track the roadmap in the repository issues.
 
 ## Licensing
 
-Modern source, automation, and project-authored documentation are available under the MIT License. Preserved files under `legacy-source/` and `docs/original/` remain all-rights-reserved historical artifacts. See `LICENSE.md`.
+Modern source, automation, and project-authored documentation are licensed under MIT. Preserved files under `legacy-source/` and `docs/original/` remain historical, all-rights-reserved artifacts unless explicitly stated otherwise. See [LICENSE.md](LICENSE.md).
 
-## GitHub publication
+## Author
 
-The repository is prepared for `danwiz/sports-management-system-legacy` on branch `main`, with initial annotated tag `v0.10.0`. See `docs/governance/GITHUB_PUBLICATION_MANIFEST.md`.
+Dane Wisdom — IT Consultant, Solutions Architect, and Founder of Wisdom Technologies.
