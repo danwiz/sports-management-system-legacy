@@ -1,7 +1,21 @@
 # Publication Complete
 
-The verified Sports Management System modernization source was published to `main` in commit `413ec7a627f6795aafe92de70138ba25ee333186`.
+The Sports Management System legacy-preservation and C++20 modernization repository is fully published and released.
 
-The CMake build-and-test workflow was added separately in commit `9062a55bd8ea4d8b152f742b75d01d361edda016` because GitHub correctly prevents runner tokens without workflow permission from creating workflow files.
+## Verified publication state
 
-The repository now contains the preserved legacy artifacts, the modern C++20 implementation, tests, sample data, governance documentation, packaging scripts, and CI configuration.
+- Repository: `danwiz/sports-management-system-legacy`
+- Default branch: `main`
+- Verified source commit: `413ec7a627f6795aafe92de70138ba25ee333186`
+- CMake workflow commit: `9062a55bd8ea4d8b152f742b75d01d361edda016`
+- Release: `v0.10.0`
+- Release URL: https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0
+- CI result: configure passed, build passed, seven of seven regression test suites passed
+
+## Scope
+
+The repository preserves the historical 2005–2006 academic implementation separately from the portable C++20 modernization. Provenance, security, contribution, release, packaging, and licensing controls are included.
+
+## Release status
+
+`v0.10.0 — Release Packaging and Demonstration Baseline` is published as the latest stable release.
