@@ -48,14 +48,26 @@ int main() {
 
     assert(service.add_team({"SOC-A", "Alpha", "soccer", {}}, error));
     assert(service.add_team({"SOC-B", "Beta", "soccer", {}}, error));
+    assert(service.add_team({"NET-A", "Nets", "netball", {}}, error));
     assert(!service.add_team({"SOC-A", "Duplicate", "soccer", {}}, error));
+
+    assert(service.update_team({"SOC-A", "Alpha United", "soccer", {}}, error));
+    assert(teams.find("SOC-A")->name == "Alpha United");
 
     assert(!service.add_member({"P-1", "Ada", "Lovelace", "1815-12-10", "MISSING"}, error));
     assert(service.add_member({"P-1", "Ada", "Lovelace", "1815-12-10", "SOC-A"}, error));
+    assert(!service.update_team({"SOC-A", "Alpha United", "netball", {}}, error));
+    assert(teams.find("SOC-A")->sport == "soccer");
 
     assert(!service.add_match({"M-0", "soccer", "SOC-A", "SOC-A", "2026-08-01", "Main", 0, 0}, error));
     assert(service.add_match({"M-1", "soccer", "SOC-A", "SOC-B", "2026-08-01", "Main", 2, 1}, error));
     assert(!service.remove_team("SOC-A", error));
+
+    assert(service.update_match({"M-1", "soccer", "SOC-A", "SOC-B", "2026-08-02 18:00", "Stadium", 3, 2}, error));
+    assert(matches.find("M-1")->venue == "Stadium");
+    assert(matches.find("M-1")->home_score == 3);
+    assert(!service.update_match({"M-1", "soccer", "SOC-A", "NET-A", "2026-08-02 18:00", "Stadium", 3, 2}, error));
+    assert(matches.find("M-1")->away_team_code == "SOC-B");
 
     assert(service.add_performance({"STAT-1", "M-1", "P-1", "soccer", 1, 1, 0}, error));
     assert(!service.remove_member("P-1", error));
