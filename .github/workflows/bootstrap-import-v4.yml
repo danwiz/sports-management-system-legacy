@@ -43,14 +43,17 @@ jobs:
           test -f "$root/CHANGELOG.md"
           test -f "$root/RELEASE_NOTES.md"
           test -f "$root/docs/governance/PROVENANCE_AND_ATTRIBUTION.md"
-          test -d "$root/.github/workflows"
+          test -f "$root/.github/workflows/cmake.yml"
 
-      - name: Replace bootstrap repository with verified source
+      - name: Replace repository with verified source except workflows
         shell: bash
         run: |
           set -euo pipefail
           root='/tmp/sms-import/sports-management-system-legacy'
-          rsync -a --delete --exclude='.git/' "$root/" ./
+          rsync -a --delete \
+            --exclude='.git/' \
+            --exclude='.github/workflows/' \
+            "$root/" ./
 
       - name: Commit imported source
         shell: bash
