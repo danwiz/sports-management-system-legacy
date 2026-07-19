@@ -112,7 +112,8 @@ void members_menu(sms::SportsService& service, sms::MemberRepository& members) {
         }
         if (choice == "4") {
             const auto id = prompt("Member ID to delete: ");
-            std::cout << (members.remove(id) ? "Member deleted.\n" : "Member not found.\n");
+            std::string error;
+            std::cout << (service.remove_member(id, error) ? "Member deleted.\n" : "Unable to delete member: " + error + "\n");
             continue;
         }
         std::cout << "Unknown selection.\n";
@@ -144,7 +145,8 @@ void matches_menu(sms::SportsService& service, sms::MatchRepository& matches) {
         }
         if (choice == "4") {
             const auto id = prompt("Match ID to delete: ");
-            std::cout << (matches.remove(id) ? "Match deleted.\n" : "Match not found.\n");
+            std::string error;
+            std::cout << (service.remove_match(id, error) ? "Match deleted.\n" : "Unable to delete match: " + error + "\n");
             continue;
         }
         std::cout << "Unknown selection.\n";
@@ -153,7 +155,7 @@ void matches_menu(sms::SportsService& service, sms::MatchRepository& matches) {
 
 void statistics_menu(sms::SportsService& service, sms::PerformanceRepository& performances) {
     while (true) {
-        std::cout << "\nStatistics and MVP\n1. List statistics\n2. Add performance\n3. Show MVPs\n4. Write mvp.txt\n0. Back\n";
+        std::cout << "\nStatistics and MVP\n1. List statistics\n2. Add performance\n3. Edit performance\n4. Delete performance\n5. Show MVPs\n6. Write mvp.txt\n0. Back\n";
         const auto choice = prompt("Selection: ");
         if (choice == "0") return;
         if (choice == "1") {
@@ -167,9 +169,32 @@ void statistics_menu(sms::SportsService& service, sms::PerformanceRepository& pe
             std::string error; std::cout << (service.add_performance(std::move(item), error) ? "Performance added.\n" : "Unable to add performance: " + error + "\n"); continue;
         }
         if (choice == "3") {
+            const auto id = prompt("Performance ID to edit: ");
+            auto item = performances.find(id);
+            if (!item) { std::cout << "Performance not found.\n"; continue; }
+            const auto match_id = prompt("Match ID [" + item->match_id + "]: ");
+            const auto member_id = prompt("Member ID [" + item->member_id + "]: ");
+            const auto sport = prompt("Sport [" + item->sport + "]: ");
+            if (!match_id.empty()) item->match_id = match_id;
+            if (!member_id.empty()) item->member_id = member_id;
+            if (!sport.empty()) item->sport = sport;
+            item->primary = prompt_int("Primary statistic: ");
+            item->secondary = prompt_int("Secondary statistic: ");
+            item->tertiary = prompt_int("Tertiary statistic: ");
+            std::string error;
+            std::cout << (service.update_performance(*item, error) ? "Performance updated.\n" : "Unable to update performance: " + error + "\n");
+            continue;
+        }
+        if (choice == "4") {
+            const auto id = prompt("Performance ID to delete: ");
+            std::string error;
+            std::cout << (service.remove_performance(id, error) ? "Performance deleted.\n" : "Unable to delete performance: " + error + "\n");
+            continue;
+        }
+        if (choice == "5") {
             for (const auto& sport : {std::string("soccer"), std::string("netball"), std::string("track")}) { auto mvp=service.mvp_for_sport(sport); std::cout << sport << ": "; if(mvp) std::cout << mvp->member.first_name << ' ' << mvp->member.last_name << " (score " << mvp->score << ")\n"; else std::cout << "No qualifying statistics.\n"; } continue;
         }
-        if (choice == "4") { std::string error; std::cout << (service.write_mvp_file("mvp.txt", error) ? "mvp.txt written.\n" : "Unable to write file: " + error + "\n"); continue; }
+        if (choice == "6") { std::string error; std::cout << (service.write_mvp_file("mvp.txt", error) ? "mvp.txt written.\n" : "Unable to write file: " + error + "\n"); continue; }
         std::cout << "Unknown selection.\n";
     }
 }
