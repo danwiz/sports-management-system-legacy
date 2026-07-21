@@ -3,6 +3,23 @@
 All notable modernization changes are documented here. The preserved legacy
 artifacts remain unchanged except for archival organization and metadata.
 
+## [0.11.0] - Unreleased
+
+### Added
+- Service-routed member, match, and performance lifecycle operations.
+- Referentially safe deletion and validated performance update/removal.
+- Complete team and match editing workflows in the portable CLI.
+- Blank-to-retain field editing and safe optional integer input.
+- Sport-specific performance prompts and display labels.
+- Requirements traceability matrix covering assignment, UAT, implementation, tests, and backlog.
+- Mermaid architecture set for domain, components, mutation flow, backup/restore, and preservation boundaries.
+- Portfolio-ready GitHub Pages, repository metadata, topics, and social preview.
+
+### Changed
+- CLI mutation paths now consistently use `SportsService` validation.
+- README and Pages documentation now link to traceability and architecture evidence.
+- Release validation is consolidated under Issue #16.
+
 ## [0.10.0] - 2026-07-15
 
 ### Added
