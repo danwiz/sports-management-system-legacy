@@ -1,5 +1,20 @@
 # Release Notes
 
+## v0.11.0 — Lifecycle Integrity, Complete Editing, and Traceability
+
+- Routed member, match, and performance mutations through `SportsService`.
+- Added referentially safe member and match deletion.
+- Added validated performance update and deletion.
+- Completed team editing and full match editing in the CLI.
+- Added blank-to-retain editing and safe optional integer input.
+- Added sport-specific performance prompts and labels.
+- Expanded regression coverage for accepted and rejected lifecycle operations.
+- Added the authoritative requirements traceability matrix.
+- Added Mermaid diagrams for the domain model, component architecture, mutation flow, backup/restore, and preservation boundary.
+- Updated the GitHub Pages case study, repository metadata, topics, and social preview.
+
+Release publication remains gated on the final green CMake validation tracked in Issue #16.
+
 ## v0.10.0 — Release Packaging and Demonstration Baseline
 
 - Added CMake install rules and CPack ZIP/TGZ distribution generation.
