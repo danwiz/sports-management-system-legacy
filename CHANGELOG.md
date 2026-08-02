@@ -3,7 +3,7 @@
 All notable modernization changes are documented here. The preserved legacy
 artifacts remain unchanged except for archival organization and metadata.
 
-## [0.11.0] - Unreleased
+## [0.11.0] - 2026-08-01
 
 ### Added
 - Service-routed member, match, and performance lifecycle operations.
