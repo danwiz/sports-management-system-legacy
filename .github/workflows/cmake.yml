@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: cmake --build build --config Debug --parallel 2
       - name: Test
-        run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error --output-junit test-results.xml
+        run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error --timeout 30 --output-junit test-results.xml
       - name: Install
         run: cmake --install build --config Debug --prefix stage
       - name: Package ZIP and TGZ
