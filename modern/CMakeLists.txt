@@ -59,6 +59,6 @@ install(FILES ../README.md ../RELEASE_NOTES.md DESTINATION ${CMAKE_INSTALL_DOCDI
 set(CPACK_PACKAGE_NAME "sports-management-system")
 set(CPACK_PACKAGE_VENDOR "Dane Wisdom")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modern C++20 restoration of a legacy sports management system")
-set(CPACK_PACKAGE_VERSION "0.10.0")
+set(CPACK_PACKAGE_VERSION "0.11.0")
 set(CPACK_GENERATOR "TGZ;ZIP")
 include(CPack)

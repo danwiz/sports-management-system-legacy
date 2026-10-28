@@ -1,0 +1,54 @@
+name: Release packages
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag
+        required: true
+        default: v0.11.0
+permissions:
+  contents: write
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - name: Validate with assertions enabled
+        shell: bash
+        run: |
+          cmake -S modern -B build-test -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-test --config Debug --parallel 2
+          ctest --test-dir build-test -C Debug --output-on-failure --timeout 30 --no-tests=error
+      - name: Build release binaries
+        shell: bash
+        run: |
+          cmake -S modern -B build-release -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-release --config Release --parallel 2
+          cpack --config build-release/CPackConfig.cmake -C Release -B packages
+      - name: Check version and publish packages
+        shell: pwsh
+        run: |
+          $version = $env:RELEASE_TAG -replace '^v', ''
+          $files = @(Get-ChildItem packages -File | Where-Object { $_.Name -match '\.(zip|tar\.gz)$' } | Sort-Object Name)
+          if ($files.Count -ne 2) { throw 'Expected ZIP and TGZ' }
+          foreach ($file in $files) {
+            if (-not $file.Name.Contains("-$version-")) { throw 'Package version does not match release tag' }
+          }
+          $manifest = "packages/SHA256SUMS-$env:RUNNER_OS-$env:RUNNER_ARCH.txt"
+          $files | ForEach-Object {
+            "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant())  $($_.Name)"
+          } | Set-Content $manifest
+          gh release upload $env:RELEASE_TAG @($files.FullName) $manifest
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed' }
