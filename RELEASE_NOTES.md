@@ -13,7 +13,7 @@
 - Added Mermaid diagrams for the domain model, component architecture, mutation flow, backup/restore, and preservation boundary.
 - Updated the GitHub Pages case study, repository metadata, topics, and social preview.
 
-Release publication remains gated on the final green CMake validation tracked in Issue #16.
+Published on 2026-10-28 after successful Windows, Ubuntu, and macOS validation. Platform ZIP/TGZ packages and SHA-256 manifests are built from the release tag.
 
 ## v0.10.0 — Release Packaging and Demonstration Baseline
 

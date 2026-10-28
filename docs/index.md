@@ -48,7 +48,7 @@ The project uses recovered assignment requirements and user-acceptance feedback 
 
 ## Validation
 
-The `v0.10.0` release passed a clean GitHub Actions run:
+The `v0.11.0` release passed a clean GitHub Actions run:
 
 - Configuration: passed
 - Build: passed
@@ -57,7 +57,7 @@ The `v0.10.0` release passed a clean GitHub Actions run:
 ## Explore
 
 - [Repository](https://github.com/danwiz/sports-management-system-legacy)
-- [Latest release](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
+- [Latest release](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.11.0)
 - [Technical assessment](analysis/TECHNICAL_ASSESSMENT.md)
 - [Architecture decision](architecture/ADR-0001-preserve-and-modernize.md)
 - [Requirements traceability matrix](modernization/REQUIREMENTS_TRACEABILITY_MATRIX.md)
@@ -67,7 +67,7 @@ The `v0.10.0` release passed a clean GitHub Actions run:
 
 ## Next phase
 
-The active `v0.11.0` work has completed lifecycle routing, editing workflows, requirements traceability, and architecture documentation. Remaining maintenance and portfolio work is tracked in the repository issues.
+The published `v0.11.0` release includes lifecycle routing, editing workflows, requirements traceability, and architecture documentation. Remaining maintenance and portfolio work is tracked in the repository issues.
 
 ---
 

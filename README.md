@@ -1,13 +1,13 @@
 # Sports Management System — Legacy C++ Preservation & Modernization
 
 [![CMake](https://github.com/danwiz/sports-management-system-legacy/actions/workflows/cmake.yml/badge.svg)](https://github.com/danwiz/sports-management-system-legacy/actions/workflows/cmake.yml)
-[![Release](https://img.shields.io/github/v/release/danwiz/sports-management-system-legacy)](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
+[![Release](https://img.shields.io/github/v/release/danwiz/sports-management-system-legacy)](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.11.0)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)
 [![License: MIT](https://img.shields.io/badge/modern%20code-MIT-green.svg)](LICENSE.md)
 
 A preservation and modernization case study for a University of Technology sports-management coursework project originally developed in 2005–2006 using Borland-era C++ console graphics.
 
-**Latest release:** [v0.10.0 — Release Packaging and Demonstration Baseline](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
+**Latest release:** [v0.11.0 — Lifecycle Integrity, Complete Editing, and Traceability](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.11.0)
 
 ## Why this project matters
 
@@ -23,7 +23,7 @@ The project intentionally separates two tracks:
 - Clean GitHub Actions configuration: passed
 - C++20 build: passed
 - Automated tests: 7 of 7 passed
-- Stable release: `v0.10.0`
+- Stable release: `v0.11.0`
 - Release packaging: ZIP and TGZ through CPack
 - Provenance and split-licensing controls: documented
 
