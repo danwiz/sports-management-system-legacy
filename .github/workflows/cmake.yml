@@ -1,5 +1,8 @@
 name: CMake
 
+permissions:
+  contents: read
+
 on:
   push:
   pull_request:
@@ -10,12 +13,54 @@ on:
 jobs:
   build-and-test:
     if: github.event_name != 'issues' || github.event.issue.title == 'Run CMake release validation'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Configure
-        run: cmake -S modern -B build
+        # Existing tests use assert; Debug keeps those checks enabled.
+        run: cmake -S modern -B build -DCMAKE_BUILD_TYPE=Debug
+      - name: Record toolchain
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force evidence | Out-Null
+          cmake --version | Out-File evidence/toolchain.txt
+          Get-ChildItem build/CMakeFiles -Recurse -Filter CMakeCXXCompiler.cmake |
+            Get-Content | Add-Content evidence/toolchain.txt
+          "Commit: $env:GITHUB_SHA" | Add-Content evidence/toolchain.txt
+          "Runner: $env:RUNNER_OS $env:RUNNER_ARCH" | Add-Content evidence/toolchain.txt
       - name: Build
-        run: cmake --build build --parallel
+        run: cmake --build build --config Debug --parallel 2
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error --output-junit test-results.xml
+      - name: Install
+        run: cmake --install build --config Debug --prefix stage
+      - name: Package ZIP and TGZ
+        run: cpack --config build/CPackConfig.cmake -C Debug -B packages
+      - name: Record package checksums
+        shell: pwsh
+        run: |
+          $packages = @(Get-ChildItem packages -File | Where-Object { $_.Name -match '\.(zip|tar\.gz)$' } | Sort-Object Name)
+          if ($packages.Count -ne 2) { throw 'Expected one ZIP and one TGZ package' }
+          $packages | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)"
+          } | Set-Content packages/SHA256SUMS.txt
+      - name: Retain validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-${{ matrix.os }}-${{ github.sha }}
+          if-no-files-found: warn
+          path: |
+            evidence/
+            build/test-results.xml
+            build/Testing/Temporary/LastTest.log
+            build/CMakeFiles/CMakeConfigureLog.yaml
+            packages/*.zip
+            packages/*.tar.gz
+            packages/SHA256SUMS.txt
