@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <cstdint>
 #include <optional>
 #include <string>
 #include <vector>
@@ -8,8 +9,8 @@
 #include "sms/repository.hpp"
 #include "sms/team_repository.hpp"
 namespace sms {
-struct MvpResult { Member member; int score; };
-struct TeamSummary { Team team; int members; int matches_played; int wins; int draws; int losses; int points_for; int points_against; };
+struct MvpResult { Member member; std::int64_t score; };
+struct TeamSummary { Team team; int members; int matches_played; int wins; int draws; int losses; std::int64_t points_for; std::int64_t points_against; };
 class SportsService {
 public:
     SportsService(MemberRepository& members, TeamRepository& teams, MatchRepository& matches,
@@ -27,7 +28,7 @@ public:
     bool update_performance(Performance performance, std::string& error);
     bool remove_performance(const std::string& id, std::string& error);
     bool remove_team(const std::string& code, std::string& error);
-    int performance_score(const Performance& performance) const;
+    std::int64_t performance_score(const Performance& performance) const;
     std::optional<MvpResult> mvp_for_sport(const std::string& sport) const;
     bool write_mvp_file(const std::filesystem::path& path, std::string& error) const;
     std::vector<Member> search_members(const std::string& query) const;

@@ -1,0 +1,27 @@
+name: Preservation and sanitizer checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify historical artifacts are unchanged
+        run: git diff --exit-code v0.11.0 HEAD -- legacy-source docs/original docs/analysis mail-discovery
+      - name: Check Python syntax and whitespace
+        run: |
+          python -m compileall -q scripts modern/tests
+          git diff --check HEAD~1 HEAD
+      - name: Configure sanitizers and compiler warnings
+        run: cmake -S modern -B build-sanitize -DCMAKE_BUILD_TYPE=Debug '-DCMAKE_CXX_FLAGS=-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer' '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=address,undefined'
+      - name: Build
+        run: cmake --build build-sanitize --parallel 2
+      - name: Test with memory and undefined-behavior checks
+        run: ctest --test-dir build-sanitize --output-on-failure --timeout 30

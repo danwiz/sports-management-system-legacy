@@ -54,6 +54,10 @@ The `v0.11.0` release passed a clean GitHub Actions run:
 - Build: passed
 - Tests: 7 of 7 passed
 
+## Reproduce the maintained demonstration
+
+[Run the synthetic demo and inspect its terminal capture](operations/REPRODUCIBLE_DEMO.md). This evidence covers development after v0.11.0, including the corrected sample schemas.
+
 ## Explore
 
 - [Repository](https://github.com/danwiz/sports-management-system-legacy)

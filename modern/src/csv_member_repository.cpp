@@ -1,4 +1,5 @@
 #include "sms/csv_member_repository.hpp"
+#include "sms/csv_support.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -6,55 +7,6 @@
 #include <utility>
 
 namespace sms {
-namespace {
-
-std::string escape_csv(const std::string& value) {
-    if (value.find_first_of(",\"\n\r") == std::string::npos) {
-        return value;
-    }
-    std::string escaped = "\"";
-    for (char ch : value) {
-        if (ch == '"') {
-            escaped += "\"\"";
-        } else {
-            escaped += ch;
-        }
-    }
-    escaped += '"';
-    return escaped;
-}
-
-std::vector<std::string> parse_csv_line(const std::string& line) {
-    std::vector<std::string> fields;
-    std::string current;
-    bool quoted = false;
-
-    for (std::size_t i = 0; i < line.size(); ++i) {
-        const char ch = line[i];
-        if (quoted) {
-            if (ch == '"' && i + 1 < line.size() && line[i + 1] == '"') {
-                current += '"';
-                ++i;
-            } else if (ch == '"') {
-                quoted = false;
-            } else {
-                current += ch;
-            }
-        } else if (ch == '"') {
-            quoted = true;
-        } else if (ch == ',') {
-            fields.push_back(current);
-            current.clear();
-        } else {
-            current += ch;
-        }
-    }
-    fields.push_back(current);
-    return fields;
-}
-
-}  // namespace
-
 CsvMemberRepository::CsvMemberRepository(std::filesystem::path file_path)
     : file_path_(std::move(file_path)) {}
 
@@ -101,31 +53,9 @@ std::vector<Member> CsvMemberRepository::list() const {
 }
 
 std::vector<Member> CsvMemberRepository::load() const {
-    std::ifstream input(file_path_);
-    if (!input) {
-        return {};
-    }
-
-    std::vector<Member> members;
-    std::string line;
-    bool first_line = true;
-    while (std::getline(input, line)) {
-        if (first_line) {
-            first_line = false;
-            if (line == "id,first_name,last_name,date_of_birth,team_code") {
-                continue;
-            }
-        }
-        if (line.empty()) {
-            continue;
-        }
-        const auto fields = parse_csv_line(line);
-        if (fields.size() != 5 || fields[0].empty()) {
-            continue;
-        }
-        members.push_back({fields[0], fields[1], fields[2], fields[3], fields[4]});
-    }
-    return members;
+    std::vector<Member> values;
+    for(const auto& f:csv::read_rows(file_path_,5,"id,first_name,last_name,date_of_birth,team_code")) values.push_back({f[0],f[1],f[2],f[3],f[4]});
+    return values;
 }
 
 bool CsvMemberRepository::save(const std::vector<Member>& members) const {
@@ -144,11 +74,11 @@ bool CsvMemberRepository::save(const std::vector<Member>& members) const {
     }
     output << "id,first_name,last_name,date_of_birth,team_code\n";
     for (const auto& member : members) {
-        output << escape_csv(member.id) << ','
-               << escape_csv(member.first_name) << ','
-               << escape_csv(member.last_name) << ','
-               << escape_csv(member.date_of_birth) << ','
-               << escape_csv(member.team_code) << '\n';
+        output << csv::escape(member.id) << ','
+               << csv::escape(member.first_name) << ','
+               << csv::escape(member.last_name) << ','
+               << csv::escape(member.date_of_birth) << ','
+               << csv::escape(member.team_code) << '\n';
     }
     output.close();
     if (!output) {
@@ -156,10 +86,7 @@ bool CsvMemberRepository::save(const std::vector<Member>& members) const {
         return false;
     }
 
-    std::filesystem::remove(file_path_, error);
-    error.clear();
-    std::filesystem::rename(temporary, file_path_, error);
-    return !error;
+    return csv::replace_file(temporary, file_path_);
 }
 
 }  // namespace sms

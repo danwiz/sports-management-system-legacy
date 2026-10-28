@@ -41,7 +41,13 @@ The project intentionally separates two tracks:
 - Checksum-verified backup, restore, and portable export
 - Sample data, demonstration scripts, installation rules, and release packaging
 
+## Current development evidence
+
+[Reproducible synthetic demo and terminal capture](docs/operations/REPRODUCIBLE_DEMO.md) documents the post-v0.11.0 persistence, EOF and sample-schema fixes. These changes do not alter the published v0.11.0 tag.
+
 ## Build and test
+
+Requires a C++20 compiler, CMake 3.20+, and Python 3 for integration tests.
 
 ```bash
 cmake -S modern -B build

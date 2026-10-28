@@ -62,3 +62,10 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modern C++20 restoration of a legacy spor
 set(CPACK_PACKAGE_VERSION "0.11.0")
 set(CPACK_GENERATOR "TGZ;ZIP")
 include(CPack)
+
+add_executable(persistence_integrity_test tests/persistence_integrity_test.cpp)
+target_link_libraries(persistence_integrity_test PRIVATE sms_core)
+add_test(NAME persistence_integrity_test COMMAND persistence_integrity_test)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME cli_regression COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/cli_regression.py $<TARGET_FILE:sms_app> ${CMAKE_CURRENT_SOURCE_DIR}/sample-data)
+add_test(NAME portfolio_demo COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/demo.py --app $<TARGET_FILE:sms_app>)
