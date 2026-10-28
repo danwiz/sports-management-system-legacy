@@ -20,5 +20,6 @@ int main(){
     auto file=dir/"mvp.txt"; assert(service.write_mvp_file(file,e)); std::ifstream in(file); std::string text((std::istreambuf_iterator<char>(in)),{}); assert(text.find("Ada King")!=std::string::npos);
     auto member=*members.find("M1"); member.team_code="UNKNOWN"; assert(!service.update_member(member,e));
     auto match=*matches.find("G1"); match.home_score=-1; assert(!service.update_match(match,e));
+    in.close();
     std::filesystem::remove_all(dir); return 0;
 }
