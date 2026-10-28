@@ -61,8 +61,8 @@ The `v0.10.0` release passed a clean GitHub Actions run:
 - [Technical assessment](analysis/TECHNICAL_ASSESSMENT.md)
 - [Architecture decision](architecture/ADR-0001-preserve-and-modernize.md)
 - [Requirements traceability matrix](modernization/REQUIREMENTS_TRACEABILITY_MATRIX.md)
-- [Modernization documentation](modernization/)
-- [Operations documentation](operations/)
+- [CLI and UAT mapping](modernization/CLI_UAT_MAPPING.md)
+- [Installation and packaging](operations/INSTALLATION_AND_PACKAGING.md)
 - [Provenance and attribution](governance/PROVENANCE_AND_ATTRIBUTION.md)
 
 ## Next phase
