@@ -43,20 +43,9 @@ std::optional<Team> CsvTeamRepository::find(const std::string& code) const {
 std::vector<Team> CsvTeamRepository::list() const { return load(); }
 
 std::vector<Team> CsvTeamRepository::load() const {
-    std::ifstream input(file_path_);
-    if (!input) return {};
-    std::vector<Team> teams;
-    std::string line;
-    bool first = true;
-    while (std::getline(input, line)) {
-        if (first) { first = false; if (line == "code,name,sport") continue; }
-        if (line.empty()) continue;
-        const auto fields = csv::parse_line(line);
-        if (fields.size() != 3 || fields[0].empty()) continue;
-        teams.push_back({fields[0], fields[1], fields[2], {}});
-    }
-    std::ranges::sort(teams, {}, &Team::code);
-    return teams;
+    std::vector<Team> values;
+    for(const auto& f:csv::read_rows(file_path_,3,"code,name,sport")) values.push_back({f[0],f[1],f[2],{}});
+    return values;
 }
 
 bool CsvTeamRepository::save(const std::vector<Team>& teams) const {
@@ -72,10 +61,7 @@ bool CsvTeamRepository::save(const std::vector<Team>& teams) const {
     }
     output.close();
     if (!output) { std::filesystem::remove(temp, error); return false; }
-    std::filesystem::remove(file_path_, error);
-    error.clear();
-    std::filesystem::rename(temp, file_path_, error);
-    return !error;
+    return csv::replace_file(temp, file_path_);
 }
 
 }  // namespace sms

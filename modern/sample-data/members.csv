@@ -1,5 +1,5 @@
-id,first_name,last_name,team_code
-M001,Alicia,Brown,SOC-A
-M002,Marcus,Reid,SOC-B
-M003,Simone,Grant,NET-A
-M004,Andre,Lewis,TRK-A
+id,first_name,last_name,date_of_birth,team_code
+M001,Alicia,Brown,2000-01-01,SOC-A
+M002,Marcus,Reid,2000-02-02,SOC-B
+M003,Simone,Grant,2000-03-03,NET-A
+M004,Andre,Lewis,2000-04-04,TRK-A

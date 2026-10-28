@@ -1,3 +1,2 @@
-member_id,match_id,sport,primary_stat,secondary_stat,tertiary_stat
-M001,MATCH-001,Soccer,2,1,0
-M002,MATCH-001,Soccer,1,0,0
+P001,MATCH-001,M001,soccer,2,1,0
+P002,MATCH-001,M002,soccer,1,0,0

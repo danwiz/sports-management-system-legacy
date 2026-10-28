@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <stdexcept>
 #include <iostream>
 #include <optional>
 #include <string>
@@ -11,12 +12,15 @@
 #include "sms/sports_service.hpp"
 
 namespace {
+struct InputClosed {};
 
 std::string prompt(const std::string& label) {
     std::cout << label;
     std::string value;
-    std::getline(std::cin, value);
-    return value;
+    if (!std::getline(std::cin, value)) throw InputClosed{};
+    const auto first=value.find_first_not_of(" \t\r");
+    if(first==std::string::npos) return {};
+    return value.substr(first,value.find_last_not_of(" \t\r")-first+1);
 }
 
 int prompt_int(const std::string& label) {
@@ -308,7 +312,7 @@ void data_menu(sms::DataManagementService& data) {
 
 }  // namespace
 
-int main(int argc, char* argv[]) {
+int run(int argc, char* argv[]) {
     const std::filesystem::path data_directory = argc > 1 ? argv[1] : "data";
     sms::CsvMemberRepository members(data_directory / "members.csv");
     sms::CsvTeamRepository teams(data_directory / "teams.csv");
@@ -332,4 +336,10 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "Goodbye.\n";
     return 0;
+}
+
+int main(int argc, char* argv[]) {
+    try { return run(argc, argv); }
+    catch(const InputClosed&) { std::cout << "\nInput closed; unfinished operation cancelled.\n"; return 0; }
+    catch(const std::exception& error) { std::cerr << "Data error: " << error.what() << "\n"; return 1; }
 }

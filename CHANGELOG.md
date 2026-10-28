@@ -3,6 +3,13 @@
 All notable modernization changes are documented here. The preserved legacy
 artifacts remain unchanged except for archival organization and metadata.
 
+## [Unreleased]
+
+- Reject malformed CSV and backup manifests without silently dropping records.
+- Cancel unfinished CLI operations on EOF and use wide score arithmetic.
+- Correct synthetic sample schemas and add a reproducible demo with terminal evidence.
+- Add persistence, CLI, demo and preservation regression coverage.
+
 ## [0.11.0] - 2026-10-28
 
 ### Added

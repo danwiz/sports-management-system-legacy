@@ -1,0 +1,172 @@
+
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: 
+Teams
+1. List teams
+2. Add team
+3. Edit team
+4. Delete team
+0. Back
+Selection: SOC-A | Kingston Strikers | soccer
+SOC-B | Harbour United | soccer
+NET-A | Blue Diamonds | netball
+TRK-A | Velocity Club | track
+
+Teams
+1. List teams
+2. Add team
+3. Edit team
+4. Delete team
+0. Back
+Selection: 
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: 
+Members
+1. List members
+2. Add member
+3. Edit member
+4. Delete member
+0. Back
+Selection: M001 | Alicia Brown | DOB 2000-01-01 | team SOC-A
+M002 | Marcus Reid | DOB 2000-02-02 | team SOC-B
+M003 | Simone Grant | DOB 2000-03-03 | team NET-A
+M004 | Andre Lewis | DOB 2000-04-04 | team TRK-A
+
+Members
+1. List members
+2. Add member
+3. Edit member
+4. Delete member
+0. Back
+Selection: 
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: 
+Matches
+1. List matches
+2. Add match
+3. Edit match
+4. Delete match
+0. Back
+Selection: MATCH-001 | soccer | SOC-A 2 - 1 SOC-B | 2026-01-01 | Synthetic Field
+
+Matches
+1. List matches
+2. Add match
+3. Edit match
+4. Delete match
+0. Back
+Selection: 
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: 
+Statistics and MVP
+1. List statistics
+2. Add performance
+3. Edit performance
+4. Delete performance
+5. Show MVPs
+6. Write mvp.txt
+0. Back
+Selection: P001 | soccer | member M001 | match MATCH-001 | Goals=2, Assists=1, Saves=0 | score 13
+P002 | soccer | member M002 | match MATCH-001 | Goals=1, Assists=0, Saves=0 | score 5
+
+Statistics and MVP
+1. List statistics
+2. Add performance
+3. Edit performance
+4. Delete performance
+5. Show MVPs
+6. Write mvp.txt
+0. Back
+Selection: soccer: Alicia Brown (score 13)
+netball: No qualifying statistics.
+track: No qualifying statistics.
+
+Statistics and MVP
+1. List statistics
+2. Add performance
+3. Edit performance
+4. Delete performance
+5. Show MVPs
+6. Write mvp.txt
+0. Back
+Selection: mvp.txt written.
+
+Statistics and MVP
+1. List statistics
+2. Add performance
+3. Edit performance
+4. Delete performance
+5. Show MVPs
+6. Write mvp.txt
+0. Back
+Selection: 
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: 
+Data Management
+1. Create backup
+2. Restore backup
+3. Verify backup
+0. Back
+Selection: Backup directory: Backup created.
+
+Data Management
+1. Create backup
+2. Restore backup
+3. Verify backup
+0. Back
+Selection: Backup directory: Backup verified: 4 files.
+teams.csv | 129 bytes | dddef46a4468af9f
+members.csv | 186 bytes | 837f2a4dfa0c14c9
+matches.csv | 140 bytes | be7699357611f5f1
+statistics.csv | 66 bytes | ad5c4544b02a174b
+
+Data Management
+1. Create backup
+2. Restore backup
+3. Verify backup
+0. Back
+Selection: 
+Sports Management System
+Data directory: data
+1. Teams
+2. Members
+3. Matches
+4. Statistics and MVP
+5. Data Management
+0. Exit
+Selection: Goodbye.

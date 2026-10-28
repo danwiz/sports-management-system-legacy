@@ -49,23 +49,9 @@ std::optional<Match> CsvMatchRepository::find(const std::string& id) const {
 std::vector<Match> CsvMatchRepository::list() const { return load(); }
 
 std::vector<Match> CsvMatchRepository::load() const {
-    std::ifstream input(file_path_);
-    if (!input) return {};
-    std::vector<Match> matches;
-    std::string line;
-    bool first = true;
-    while (std::getline(input, line)) {
-        if (first) { first = false; if (line == "id,sport,home_team_code,away_team_code,scheduled_at,venue,home_score,away_score") continue; }
-        if (line.empty()) continue;
-        const auto fields = csv::parse_line(line);
-        if (fields.size() != 8 || fields[0].empty()) continue;
-        int home_score = 0;
-        int away_score = 0;
-        if (!parse_int(fields[6], home_score) || !parse_int(fields[7], away_score)) continue;
-        matches.push_back({fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], home_score, away_score});
-    }
-    std::ranges::sort(matches, {}, &Match::id);
-    return matches;
+    std::vector<Match> values;
+    for(const auto& f:csv::read_rows(file_path_,8,"id,sport,home_team_code,away_team_code,scheduled_at,venue,home_score,away_score")) values.push_back({f[0],f[1],f[2],f[3],f[4],f[5],csv::integer(f[6]),csv::integer(f[7])});
+    return values;
 }
 
 bool CsvMatchRepository::save(const std::vector<Match>& matches) const {
@@ -84,10 +70,7 @@ bool CsvMatchRepository::save(const std::vector<Match>& matches) const {
     }
     output.close();
     if (!output) { std::filesystem::remove(temp, error); return false; }
-    std::filesystem::remove(file_path_, error);
-    error.clear();
-    std::filesystem::rename(temp, file_path_, error);
-    return !error;
+    return csv::replace_file(temp, file_path_);
 }
 
 }  // namespace sms
